@@ -1,9 +1,11 @@
 package com.acme.bookmanagement.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 import java.time.LocalDate;
 
@@ -13,14 +15,19 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String title;
-    private String author;
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Author author;
     private LocalDate publishedDate;
 
-    public Book(Long id, String title, String author, LocalDate publishedDate) {
+    public Book(Long id, String title, Author author, LocalDate publishedDate) {
         this.id = id;
         this.title = title;
         this.author = author;
         this.publishedDate = publishedDate;
+    }
+
+    public Book() {
+
     }
 
     // Getters and Setters
@@ -40,11 +47,11 @@ public class Book {
         this.title = title;
     }
 
-    public String getAuthor() {
+    public Author getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(Author author) {
         this.author = author;
     }
 

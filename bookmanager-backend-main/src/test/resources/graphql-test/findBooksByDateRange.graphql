@@ -1,0 +1,10 @@
+query findBooksByDateRange($startDate: String!, $endDate: String!) {
+    findBooksByDateRange(startDate: $startDate, endDate: $endDate) {
+        id
+        title
+        author {
+            name
+        }
+        publishedDate
+    }
+}

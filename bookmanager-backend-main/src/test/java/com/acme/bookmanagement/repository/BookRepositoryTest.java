@@ -1,5 +1,6 @@
 package com.acme.bookmanagement.repository;
 
+import com.acme.bookmanagement.model.Author;
 import com.acme.bookmanagement.model.Book;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,7 +28,7 @@ public class BookRepositoryTest {
     public void setUp() {
         book = new Book(null,
                 "title-1",
-                "author-1",
+                new Author("author-1"),
                 LocalDate.of(2021, 2, 3));
         book = repo.save(book);
     }

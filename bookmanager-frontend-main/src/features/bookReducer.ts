@@ -3,7 +3,9 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 export interface Book {
     id: number;
     title: string;
-    author: string;
+    author: {
+        name: string;
+    };
     publishedDate: string;
 }
 

@@ -1,5 +1,6 @@
 package com.acme.bookmanagement.controller;
 
+import com.acme.bookmanagement.model.Author;
 import com.acme.bookmanagement.model.Book;
 import com.acme.bookmanagement.service.BookService;
 import org.junit.jupiter.api.Test;
@@ -26,11 +27,11 @@ public class BookControllerTest {
     private final Map<Long, Book> books = Map.of(
             1L, new Book(1L,
                     "title-1",
-                    "author-1",
+                    new Author("author-1"),
                     LocalDate.of(2021, 2, 3)),
             2L, new Book(2L,
                     "title-2",
-                    "author-2",
+                    new Author("author-2"),
                     LocalDate.of(2021, 2, 3))
     );
 
@@ -51,16 +52,62 @@ public class BookControllerTest {
                         {
                             "id": 1,
                             "title": "title-1",
-                            "author": "author-1",
+                            "author": {
+                            "name": "author-1"
+                            },
                             "publishedDate": "2021-02-03"
                         },
                         {
                             "id": 2,
                             "title": "title-2",
-                            "author": "author-2",
+                            "author": {
+                            "name": "author-2"
+                            },
                             "publishedDate": "2021-02-03"
                         }
                     ]
                 """);
     }
+
+    @Test
+    void shouldFindBooksByDateRange() {
+        // Arrange
+        when(bookService.findBooksByDateRange("2021-02-01", "2021-02-10"))
+                .thenReturn(List.of(
+                        new Book(1L, "title-1", new Author("author-1"), LocalDate.of(2021, 2, 3)),
+                        new Book(2L, "title-2", new Author("author-2"), LocalDate.of(2021, 2, 3))
+                ));
+
+        String start = "2021-02-03";
+        String end = "2021-02-03";
+
+        // Act + Assert
+        this.graphQlTester
+                .documentName("findBooksByDateRange")
+                .variable("startDate", "2021-02-01")
+                .variable("endDate", "2021-02-10")
+                .execute()
+                .path("findBooksByDateRange")
+                .matchesJson("""
+            [
+              {
+                "id": 1,
+                "title": "title-1",
+                "publishedDate": "2021-02-03",
+                "author": {
+                  "name": "author-1"
+                }
+              },
+              {
+                "id": 2,
+                "title": "title-2",
+                "publishedDate": "2021-02-03",
+                "author": {
+                  "name": "author-2"
+                }
+              }
+            ]
+        """);
+    }
+
 }
