@@ -11,7 +11,9 @@ export const fetchBooks = async (): Promise<Book[]> => {
         findAllBooks {
           id
           title
-          author
+          author {
+            name
+            }
           publishedDate
         }
       }`,
@@ -31,7 +33,9 @@ export const fetchBookById = async (id: number): Promise<Book> => {
         findBookById {
           id
           title
-          author
+          author {
+            name
+            }
           publishedDate
         }
       }`,
@@ -48,15 +52,23 @@ export const createBook = async (book: Omit<Book, 'id'>): Promise<Book> => {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
-            query: `mutation($title: String!, $author: String!, $publishedDate: String!) {
-        createBook(title: $title, author: $author, publishedDate: $publishedDate) {
+            query: `mutation($input: BookInput!) {
+        createBook(input: $input) {
           id
           title
-          author
+          author {
+            name
+            }
           publishedDate
         }
       }`,
-            variables: book,
+            variables: {
+                input: {
+                    title: book.title,
+                    publishedDate: book.publishedDate,
+                    authorName: book.author.name
+                }
+            }
         }),
     });
 

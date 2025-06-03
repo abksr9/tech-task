@@ -14,8 +14,8 @@ describe('BooksList', () => {
         initialState = {
             books: {
                 books: [
-                    { id: 1, title: 'Book One', author: 'Author One', publishedDate: '2021-01-01' },
-                    { id: 2, title: 'Book Two', author: 'Author Two', publishedDate: '2022-02-02' },
+                    { id: 1, title: 'Book One', author: { name: 'Author One' }, publishedDate: '2021-01-01' },
+                    { id: 2, title: 'Book Two', author: { name: 'Author Two' }, publishedDate: '2022-02-02' },
                 ],
             },
         };
@@ -34,8 +34,11 @@ describe('BooksList', () => {
             </Provider>
         );
 
+        // eslint-disable-next-line testing-library/prefer-screen-queries
         expect(getByText('Books')).toBeInTheDocument();
+        // eslint-disable-next-line testing-library/prefer-screen-queries
         expect(getByText('Book One by Author One (Published: 2021-01-01)')).toBeInTheDocument();
+        // eslint-disable-next-line testing-library/prefer-screen-queries
         expect(getByText('Book Two by Author Two (Published: 2022-02-02)')).toBeInTheDocument();
     });
 });
